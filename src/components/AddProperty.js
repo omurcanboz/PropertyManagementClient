@@ -1,44 +1,77 @@
 
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from 'react-router';
+import FileBase64 from 'react-file-base64';
 
 const AddProperty = () => {
 
+
+    const navigate = useNavigate();
     const data = useRef();
     const [stateSelector, setStateSelector] = useState([]);
     const [citySelector, setCitySelector] = useState([]);
-    const [propertyType, setPropertyType] = useState([]);
+    const [propertyTypeState, setPropertyTypeState] = useState([]);
 
-    const [state, setState] = useState({});
-    const [city, setCity] = useState({});
-    const [type, setType] = useState({});
+    const [photoState, setPhotoState] = useState([]);
+
+    const [resultState, setResultState] = useState(
+        {
+            name: '',
+            numberOfBedrooms: 0,
+            numberOfBathrooms: 0,
+            rentAmount: 0,
+            securityDepositAmount: 0,
+            lastRentedDate: '2022-02-14',
+            photos: [],
+            lastRentedBy: {
+                id:2
+            },
+            ownedBy: {
+                id: 2
+            },
+            city: {
+                id: '',
+                name: '',
+                state: {
+                    id: '',
+                    name: ''
+                }
+            },
+            rentPeriods: [],
+            propertyType: {
+                id: '',
+                type: ''
+            },
+            occupied: false
+        }
+    )
 
     const persistData = async (event) => {
         event.preventDefault();
-        var object = {};
-        const form = new FormData(data);
-        form.forEach((value, key) => object[key] = value);
-        var json = JSON.stringify(object);
-        console.log("FORM DATA: ", json);
+        console.log("RESULT: ", resultState);
+        persistProperty();
+
 
     }
 
     const getState = async () => {
         let result = await axios.get('http://localhost:8080/api/v1/states');
-        console.log(result.data);
         setStateSelector(result.data);
     }
 
     const getPropertyType = async () => {
         let result = await axios.get('http://localhost:8080/api/v1/property-types');
-        setPropertyType(result.data);
+        setPropertyTypeState(result.data);
     }
 
     const getCity = async (event) => {
         let val = event.target.value;
-        console.log("VALUE: ", event.target)
-        let result = await axios.get('http://localhost:8080/api/v1/cities/state/' + val);
+        console.log("VALUE: ", val)
+        let res = val.split(',')[0];
+        let result = await axios.get('http://localhost:8080/api/v1/cities/state/' + res);
         setCitySelector(result.data);
+        onStateFieldsChanged(event);
     }
 
     useEffect(() => {
@@ -46,6 +79,59 @@ const AddProperty = () => {
         getPropertyType();
     }, [])
 
+    useEffect(() => {
+        console.log(photoState);
+        onPhotosChanged();
+    }, [photoState])
+
+    const persistProperty = async () => {
+        let result = await axios.post('http://localhost:8080/api/v1/properties', resultState);
+        navigate('/properties');
+    }
+
+    const onPhotosChanged = (event) => {
+        let copy = { ...resultState};
+        copy['photos'] = photoState;
+        setResultState(copy);
+    }
+
+    const onFieldsChanged = (event) => {
+        let copy = { ...resultState };
+        copy[event.target.name] = event.target.value;
+        setResultState(copy);
+    }
+
+    const onStateFieldsChanged = (event) => {
+        let copy = { ...resultState };
+        console.log("NAME: ", event.target.value);
+        copy['city']['state'].id = event.target.value.split(',')[0];
+        copy['city']['state'].name = event.target.value.split(',')[1];
+        setResultState(copy);
+    }
+
+    const onCityFieldsChanged = (event) => {
+        let copy = { ...resultState };
+        console.log("NAME: ", event.target.value);
+        copy['city'].id = event.target.value.split(',')[0];
+        copy['city'].name = event.target.value.split(',')[1];
+        setResultState(copy);
+    }
+
+    const onPropertyTypeFieldsChanged = (event) => {
+        let copy = { ...resultState };
+        console.log("NAME: ", event.target.value);
+        copy['propertyType'].id = event.target.value.split(',')[0];
+        copy['propertyType'].type = event.target.value.split(',')[1];
+        setResultState(copy);
+    }
+
+    const getFiles = (files) => {
+        let base64Files = []
+        files.map((f)=>{
+            base64Files.push(f.base64);
+        })
+        setPhotoState([...photoState, ...base64Files])
+    }
 
 
     return (
@@ -56,28 +142,35 @@ const AddProperty = () => {
 
                 <div >
                     <label htmlFor='name'>Name</label>
-                    <input type='text' id='name' />
+                    <input type='text' id='name' name='name' onChange={onFieldsChanged} />
                 </div>
 
                 <div >
-                    <label htmlFor='numBed'>Number of Bedrooms</label>
-                    <input type='text' id='numBed' />
+                    <label htmlFor='numberOfBedrooms'>Number of Bedrooms</label>
+                    <input type='text' id='numberOfBedrooms' name='numberOfBedrooms' onChange={onFieldsChanged} />
                 </div>
 
                 <div >
-                    <label htmlFor='numBath'>Number of Bathrooms</label>
-                    <input type='text' id='numBath' />
+                    <label htmlFor='numberOfBathrooms'>Number of Bathrooms</label>
+                    <input type='text' id='numberOfBathrooms' name='numberOfBathrooms' onChange={onFieldsChanged} />
                 </div>
 
                 <div >
-                    <label htmlFor='amount'>Rent Amount</label>
-                    <input type='text' id='amount' />
+                    <label htmlFor='rentAmount'>Rent Amount</label>
+                    <input type='text' id='rentAmount' name='rentAmount' onChange={onFieldsChanged} />
                 </div>
 
                 <div >
-                    <label htmlFor='deposit'>Security Deposit Amount</label>
-                    <input type='text' id='deposit' />
+                    <label htmlFor='securityDepositAmount'>Security Deposit Amount</label>
+                    <input type='text' id='securityDepositAmount' name='securityDepositAmount' onChange={onFieldsChanged} />
                 </div>
+
+                <div>
+                    <FileBase64
+                        multiple={true}
+                        onDone={getFiles} />
+                </div>
+
 
                 <div>
                     State
@@ -86,7 +179,7 @@ const AddProperty = () => {
                         <option defaultValue>Select</option>
                         {stateSelector.map(s => {
                             return (
-                                <option key={s.id} value={s.id}>{s.name}</option>
+                                <option key={s.id} value={[s.id, s.name]}>{s.name}</option>
                             )
                         })}
 
@@ -95,11 +188,11 @@ const AddProperty = () => {
 
                 <div>
                     City
-                    <select>
+                    <select onChange={onCityFieldsChanged}>
                         <option defaultValue>Select</option>
                         {citySelector.map(s => {
                             return (
-                                <option key={s.id} value={s.id}>{s.name}</option>
+                                <option key={s.id} value={[s.id, s.name]} >{s.name}</option>
                             )
 
                         })}
@@ -109,11 +202,11 @@ const AddProperty = () => {
 
                 <div>
                     Property Type
-                    <select>
+                    <select onChange={onPropertyTypeFieldsChanged}>
                         <option defaultValue>Select</option>
-                        {propertyType.map(s => {
+                        {propertyTypeState.map(s => {
                             return (
-                                <option key={s.id} value={s.id}>{s.type}</option>
+                                <option key={s.id} value={[s.id, s.type]}>{s.type}</option>
                             )
                         })}
 

@@ -21,19 +21,6 @@ const Properties = (props) => {
     }, [])
 
 
-    const handleInputChange = (event) => {
-        let files = event.target.files;
-        let reader = new FileReader();
-        reader.readAsDataURL(files[0]);
-
-        reader.onload = (e) => {
-
-            console.log(e.target.result);
-
-        };
-
-    }
-
     const propertyList = propertyState.map(p => {
 
         return (
