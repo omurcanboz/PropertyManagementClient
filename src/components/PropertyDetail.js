@@ -16,8 +16,7 @@ const PropertyDetail = () => {
         setPropertyDetail(result.data)
     }
 
-    useEffect(
-        () => {
+    useEffect(() => {
             console.log("PARAM ID: " , params.id)
             fetchProperty();
         }, [params.id])
@@ -33,7 +32,7 @@ const PropertyDetail = () => {
                 </div>
                 <h1> {propertyDetail.name}</h1>
                 <div >
-                    {propertyDetail.amount}
+                    {propertyDetail.rentAmount}
                     <br />
 
                     <div style={{ textAlign: "left" }}>

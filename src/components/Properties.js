@@ -4,7 +4,6 @@ import Property from "./Property";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react"
-import PropertyDetail from "./PropertyDetail";
 
 
 
@@ -43,7 +42,7 @@ const Properties = (props) => {
 
             <div key={p.id}>
 
-                <Link to={`${p.id}`} key={p.id} >
+                <Link to={`${p.id}`} >
 
                     <Property key={p.id} name={p.name}
                         image={p.photos[0]}
