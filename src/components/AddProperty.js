@@ -1,6 +1,6 @@
 
 import axios from "axios";
-import React, { useEffect, useRef, useState } from "react";
+import React, { Fragment, useEffect, useRef, useState } from "react";
 import { useNavigate } from 'react-router';
 import FileBase64 from 'react-file-base64';
 
@@ -25,7 +25,7 @@ const AddProperty = () => {
             lastRentedDate: '2022-02-14',
             photos: [],
             lastRentedBy: {
-                id:2
+                id: 2
             },
             ownedBy: {
                 id: 2
@@ -90,7 +90,7 @@ const AddProperty = () => {
     }
 
     const onPhotosChanged = (event) => {
-        let copy = { ...resultState};
+        let copy = { ...resultState };
         copy['photos'] = photoState;
         setResultState(copy);
     }
@@ -127,7 +127,7 @@ const AddProperty = () => {
 
     const getFiles = (files) => {
         let base64Files = []
-        files.map((f)=>{
+        files.map((f) => {
             base64Files.push(f.base64);
         })
         setPhotoState([...photoState, ...base64Files])
@@ -135,90 +135,95 @@ const AddProperty = () => {
 
 
     return (
-
-        <div>
-
-            <form ref={data} onSubmit={persistData}>
-
-                <div >
-                    <label htmlFor='name'>Name</label>
-                    <input type='text' id='name' name='name' onChange={onFieldsChanged} />
-                </div>
-
-                <div >
-                    <label htmlFor='numberOfBedrooms'>Number of Bedrooms</label>
-                    <input type='text' id='numberOfBedrooms' name='numberOfBedrooms' onChange={onFieldsChanged} />
-                </div>
-
-                <div >
-                    <label htmlFor='numberOfBathrooms'>Number of Bathrooms</label>
-                    <input type='text' id='numberOfBathrooms' name='numberOfBathrooms' onChange={onFieldsChanged} />
-                </div>
-
-                <div >
-                    <label htmlFor='rentAmount'>Rent Amount</label>
-                    <input type='text' id='rentAmount' name='rentAmount' onChange={onFieldsChanged} />
-                </div>
-
-                <div >
-                    <label htmlFor='securityDepositAmount'>Security Deposit Amount</label>
-                    <input type='text' id='securityDepositAmount' name='securityDepositAmount' onChange={onFieldsChanged} />
-                </div>
-
-                <div>
-                    <FileBase64
-                        multiple={true}
-                        onDone={getFiles} />
-                </div>
+        <Fragment>
+            <h1 className="add-property-title">Add Property</h1>
+            <div className="add-property">
 
 
-                <div>
-                    State
-                    <select onChange={getCity}>
 
-                        <option defaultValue>Select</option>
-                        {stateSelector.map(s => {
-                            return (
-                                <option key={s.id} value={[s.id, s.name]}>{s.name}</option>
-                            )
-                        })}
+                <form ref={data} onSubmit={persistData}>
 
-                    </select>
-                </div>
+                    <div >
+                        <label htmlFor='name'>Name</label>
+                        <input type='text' id='name' name='name' onChange={onFieldsChanged} />
+                    </div>
 
-                <div>
-                    City
-                    <select onChange={onCityFieldsChanged}>
-                        <option defaultValue>Select</option>
-                        {citySelector.map(s => {
-                            return (
-                                <option key={s.id} value={[s.id, s.name]} >{s.name}</option>
-                            )
+                    <div >
+                        <label htmlFor='numberOfBedrooms'>Number of Bedrooms</label>
+                        <input type='text' id='numberOfBedrooms' name='numberOfBedrooms' onChange={onFieldsChanged} />
+                    </div>
 
-                        })}
+                    <div >
+                        <label htmlFor='numberOfBathrooms'>Number of Bathrooms</label>
+                        <input type='text' id='numberOfBathrooms' name='numberOfBathrooms' onChange={onFieldsChanged} />
+                    </div>
 
-                    </select>
-                </div>
+                    <div >
+                        <label htmlFor='rentAmount'>Rent Amount</label>
+                        <input type='text' id='rentAmount' name='rentAmount' onChange={onFieldsChanged} />
+                    </div>
 
-                <div>
-                    Property Type
-                    <select onChange={onPropertyTypeFieldsChanged}>
-                        <option defaultValue>Select</option>
-                        {propertyTypeState.map(s => {
-                            return (
-                                <option key={s.id} value={[s.id, s.type]}>{s.type}</option>
-                            )
-                        })}
+                    <div >
+                        <label htmlFor='securityDepositAmount'>Security Deposit Amount</label>
+                        <input type='text' id='securityDepositAmount' name='securityDepositAmount' onChange={onFieldsChanged} />
+                    </div>
 
-                    </select>
-                </div>
+                    <div>
+                        <label htmlFor='fileupload'>Images</label>
+                        <FileBase64
+                            id='fileupload' name='fileupload'
+                            multiple={true}
+                            onDone={getFiles} />
+                    </div>
 
-                <button>Save</button>
 
-            </form>
+                    <div>
+                        State
+                        <select onChange={getCity}>
 
-        </div>
+                            <option defaultValue>Select</option>
+                            {stateSelector.map(s => {
+                                return (
+                                    <option key={s.id} value={[s.id, s.name]}>{s.name}</option>
+                                )
+                            })}
 
+                        </select>
+                    </div>
+
+                    <div>
+                        City
+                        <select onChange={onCityFieldsChanged}>
+                            <option defaultValue>Select</option>
+                            {citySelector.map(s => {
+                                return (
+                                    <option key={s.id} value={[s.id, s.name]} >{s.name}</option>
+                                )
+
+                            })}
+
+                        </select>
+                    </div>
+
+                    <div>
+                        Property Type
+                        <select onChange={onPropertyTypeFieldsChanged}>
+                            <option defaultValue>Select</option>
+                            {propertyTypeState.map(s => {
+                                return (
+                                    <option key={s.id} value={[s.id, s.type]}>{s.type}</option>
+                                )
+                            })}
+
+                        </select>
+                    </div>
+
+                    <button>Save</button>
+
+                </form>
+
+            </div>
+        </Fragment>
     )
 
 }

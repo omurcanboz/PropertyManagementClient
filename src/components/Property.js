@@ -5,8 +5,8 @@ const Property = (props) => {
     return(
         <div>
 
-            <h1>{props.name}</h1>
-            <img src={props.image} width="150px" height="150px"></img>
+            <p className="title">{props.name}</p>
+            <img src={props.image}></img>
             <p>Property Type : {props.type}</p>
             <p>Bedroom : {props.bedroom}</p>
             <p>Bathroom : {props.bathroom}</p>

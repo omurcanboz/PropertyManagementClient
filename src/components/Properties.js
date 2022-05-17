@@ -4,6 +4,7 @@ import Property from "./Property";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react"
+import Filter from "./Filter";
 
 
 
@@ -21,11 +22,10 @@ const Properties = (props) => {
     }, [])
 
 
+
     const propertyList = propertyState.map(p => {
 
         return (
-
-
 
             <div key={p.id}>
 
@@ -56,8 +56,13 @@ const Properties = (props) => {
 
     })
 
-    
-    return propertyList;
+
+    return <div>
+                <Filter></Filter>
+                <div className="property-list">
+                    {propertyList}
+                </div>
+            </div>;
 
 
 }

@@ -1,18 +1,20 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import axios from "axios";
 import React from "react";
+import { Link } from "react-router-dom";
 
 
 const PropertyDetail = () => {
+    const role = "Tenant";
 
     const params = useParams();
+    const navigate = useNavigate();
 
     const [propertyDetail, setPropertyDetail] = useState({});
 
     const fetchProperty = async () => {
         let result = await axios.get('http://localhost:8080/api/v1/properties/' + params.id)
-        console.log(result.data)
         setPropertyDetail(result.data)
     }
 
@@ -20,6 +22,7 @@ const PropertyDetail = () => {
             console.log("PARAM ID: " , params.id)
             fetchProperty();
         }, [params.id])
+
 
 
     let productDetailsDisplay = null;
@@ -35,13 +38,21 @@ const PropertyDetail = () => {
                     {propertyDetail.rentAmount}
                     <br />
 
-                    <div style={{ textAlign: "left" }}>
+                    <div style={{ textAlign: "left" }} className="property-detail-images">
 
                         {propertyDetail.photos != null ? propertyDetail.photos.map(p => {
                             return <img src={p}></img>
                         }) : null}
                     </div>
                 </div>
+                {
+                    role == "Admin" ?
+                    <button className="delete">Delete</button>
+                    :
+                    <Link to={`/rent/${params.id}`}> <button >Rent</button></Link>
+                    
+                }
+                
             </div>;
     }
 
