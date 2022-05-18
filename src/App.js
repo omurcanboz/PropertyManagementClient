@@ -10,7 +10,13 @@ function App() {
   
   const [token, setToken] = useState();
 
-  if(!token) {
+  const key = localStorage.getItem('token');
+
+  const stateNull = () => {
+    setToken(null);
+  }
+
+  if(!token && !key) {
     return <Login setToken={setToken}></Login>
   }
 
@@ -18,7 +24,7 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-      <Dashboard></Dashboard>
+      <Dashboard setToken={stateNull}></Dashboard>
       </BrowserRouter>
     </div>
   );

@@ -1,15 +1,15 @@
 import jwtDecode from "jwt-decode";
 
 export const isAdmin = () => {
-    return getRole()==='ADMIN'
+    return getRole()=='ADMIN'
 }
 
 export const isLandLord = () => {
-    return getRole()==='LANDLORD';
+    return getRole()=='LANDLORD';
 }
 
 export const isTenant = () => {
-    return getRole()==='TENANT';
+    return getRole()=='TENANT';
 }
 
 export const getRole = () => {

@@ -2,10 +2,11 @@ import React from "react";
 import axios from "axios";
 import { useState } from "react"
 import { useEffect } from "react";
-import { getBearer } from "../util/Utility";
+import { getBearer, getRole } from "../util/Utility";
 
 const Filter = (props) => {
     const bearer = getBearer();
+    const role = getRole;
     const [stateSelector, setStateSelector] = useState([]);
     const [citySelector, setCitySelector] = useState([]);
 
@@ -28,14 +29,16 @@ const Filter = (props) => {
         }
     }
 
-    useEffect(()=>{
-        getState();
-    },[])
-    useEffect(()=>{
-        if(props.stateFilter==0)
-            setCitySelector([])
-    },[props.stateFilter])
-
+    if(role === 'TENANT') {
+        useEffect(()=>{
+            getState();
+        },[])
+        useEffect(()=>{
+            if(props.stateFilter==0)
+                setCitySelector([])
+        },[props.stateFilter])
+    }
+    
     return(
         <aside className="filter">
             <div >

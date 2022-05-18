@@ -7,6 +7,7 @@ import RentProcess from "../components/RentProcess";
 import ChartsAdmin from "../components/ChartsAdmin";
 import ChartsUser from "../components/LandlordCharts";
 import { getRole } from "../util/Utility";
+import Login from "../components/Login/LoginScreen";
 
 export default function MyRoute() {
 
@@ -33,6 +34,7 @@ export default function MyRoute() {
 
             <Route path="landlord-charts" element={<ChartsUser></ChartsUser>}>
             </Route>
+
 
         </Routes>
 

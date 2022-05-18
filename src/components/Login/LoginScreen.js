@@ -26,6 +26,7 @@ export default function Login({setToken}) {
     localStorage.setItem('uid', token.userDto.id);
     localStorage.setItem('urole', token.userDto.role);
     localStorage.setItem('token', 'Bearer ' +token.accessToken);
+    console.log(token.accessToken);
     setToken(token.accessToken);
   }
 

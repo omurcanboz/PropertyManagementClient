@@ -12,9 +12,11 @@ function ChartsUser() {
     const [daysUserState, setDaysUserState] = useState([])
     const [daysUserValueState, setDaysUserValueState] = useState([])
 
+    const uid = localStorage.getItem('uid');
+
     let userStateData=[];
     const fetchByUser = async () => {
-        const result = await axios.get('http://localhost:8080/api/v1/properties/incomes/user/2', {headers: {Authorization: bearer}})
+        const result = await axios.get('http://localhost:8080/api/v1/properties/incomes/user/' + uid, {headers: {Authorization: bearer}})
         for(let i=0;i<result.data.length; i++){
             userStateData.push({ value: result.data[i].totalAmount, name: result.data[i].name })
         }
@@ -24,7 +26,7 @@ function ChartsUser() {
     let daysUser=[]
     let dayUserValues=[]
     const fetchByWeekUser = async () => {
-        const result = await axios.get('http://localhost:8080/api/v1/properties/num-of-properties/2', {headers: {Authorization: bearer}})
+        const result = await axios.get('http://localhost:8080/api/v1/properties/num-of-properties/' + uid, {headers: {Authorization: bearer}})
         for(let i=0;i<result.data.length; i++){
            daysUser.push(result.data[i].day)
            dayUserValues.push(result.data[i].rented)
