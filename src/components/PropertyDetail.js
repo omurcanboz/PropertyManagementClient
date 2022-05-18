@@ -3,10 +3,12 @@ import { useNavigate, useParams } from "react-router";
 import axios from "axios";
 import React from "react";
 import { Link } from "react-router-dom";
+import { getBearer, getRole } from "../util/Utility";
 
 
 const PropertyDetail = () => {
-    const role = "Tenant";
+    const role = getRole();
+    const bearer = getBearer();
 
     const params = useParams();
     const navigate = useNavigate();
@@ -14,7 +16,7 @@ const PropertyDetail = () => {
     const [propertyDetail, setPropertyDetail] = useState({});
 
     const fetchProperty = async () => {
-        let result = await axios.get('http://localhost:8080/api/v1/properties/' + params.id)
+        let result = await axios.get('http://localhost:8080/api/v1/properties/' + params.id, {headers: {Authorization: bearer}})
         setPropertyDetail(result.data)
     }
 
@@ -46,7 +48,7 @@ const PropertyDetail = () => {
                     </div>
                 </div>
                 {
-                    role == "Admin" ?
+                    role == "LANDLORD" ?
                     <button className="delete">Delete</button>
                     :
                     <Link to={`/rent/${params.id}`}> <button >Rent</button></Link>

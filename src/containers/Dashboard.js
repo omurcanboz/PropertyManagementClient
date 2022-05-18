@@ -6,20 +6,7 @@ import MyRoute from "./MyRoute";
 import Login from "../components/Login/LoginScreen";
 
 const Dashboard = () => {
-    /*
-    const [authState, setAuthState] = useState("")
-    let header;
-    let login;
-    let isLoggedIn = (authState !== "");
-    if (isLoggedIn) {
-        header = <Header />;
-    } else {
-        login = <Login setAuthState={setAuth}></Login>
-    }
-    const setAuth = (auth) => {
-        setAuthState(auth)
-    }
-*/
+
     return (
         <React.Fragment>
             <div>

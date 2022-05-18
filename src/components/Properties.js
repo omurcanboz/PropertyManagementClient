@@ -6,11 +6,13 @@ import axios from "axios";
 import { useEffect, useState } from "react"
 import Filter from "./Filter";
 import ReactDOM from 'react-dom';
+import { getBearer } from "../util/Utility";
 
 
 
 const Properties = (props) => {
 
+    const bearer = getBearer();
     const [propertyState, setPropertyState] = useState([]);
     //filter
     const [roomFilter, setRoomFilter] = useState(0);
@@ -37,6 +39,7 @@ const Properties = (props) => {
         setCityFilter(copy);
     }
     useEffect(() => {
+        console.log(localStorage.getItem('token'))
         setCityFilter(0)
     }, [stateFilter])
 
@@ -79,7 +82,7 @@ const Properties = (props) => {
 
 
     const fetchProperties = async () => {
-        let result = await axios.get('http://localhost:8080/api/v1/properties')
+        let result = await axios.get('http://localhost:8080/api/v1/properties', {headers: {Authorization: bearer}})
         setPropertyState(result.data);
     }
 

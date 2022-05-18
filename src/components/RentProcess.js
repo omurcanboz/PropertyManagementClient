@@ -4,10 +4,12 @@ import DatePicker from "react-datepicker";
 import { useParams } from "react-router";
 import "react-datepicker/dist/react-datepicker.css";
 import StripeContainer from "./StripeContainer";
+import { getBearer } from "../util/Utility";
 
 
 const RentProcess = (props) => {
 
+    const bearer = getBearer();
     const context = createContext();
 
     const params = useParams();
@@ -39,7 +41,7 @@ const RentProcess = (props) => {
     }, [startDate])
 
     const fetchProperty = async () => {
-        let result = await axios.get('http://localhost:8080/api/v1/properties/' + params.id)
+        let result = await axios.get('http://localhost:8080/api/v1/properties/' + params.id, {headers: {Authorization: bearer}})
         setPropertyState(result.data)
     }
 

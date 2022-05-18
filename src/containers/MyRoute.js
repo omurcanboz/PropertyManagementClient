@@ -6,8 +6,12 @@ import AddProperty from "../components/AddProperty";
 import RentProcess from "../components/RentProcess";
 import ChartsAdmin from "../components/ChartsAdmin";
 import ChartsUser from "../components/LandlordCharts";
+import { getRole } from "../util/Utility";
 
 export default function MyRoute() {
+
+    const role = getRole();
+
     return (
 
         <Routes>

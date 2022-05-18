@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import ReactECharts from 'echarts-for-react';
 import axios from 'axios';
+import { getBearer } from '../util/Utility';
 
 
 
 function ChartsAdmin() {
+    const bearer = getBearer();
     const [stateIncomeState, setStateIncomeState] = useState([])
     const [daysValueState, setDaysValueState] = useState([])
     const [daysState, setDaysState] = useState([])
@@ -12,7 +14,7 @@ function ChartsAdmin() {
     const [stateSelector, setStateSelector] = useState([]);
     const [selectedState, setSelectedState] = useState();
     const getState = async () => {
-        let result = await axios.get('http://localhost:8080/api/v1/states');
+        let result = await axios.get('http://localhost:8080/api/v1/states', {headers: {Authorization: bearer}});
         setStateSelector(result.data);
     }
     const onStateFieldsChanged = (event) => {
@@ -24,7 +26,7 @@ function ChartsAdmin() {
 
     let stateData = [];
     const fetchByState = async () => {
-        const result = await axios.get('http://localhost:8080/api/v1/cities/incomes/'+selectedState)
+        const result = await axios.get('http://localhost:8080/api/v1/cities/incomes/'+selectedState, {headers: {Authorization: bearer}})
         for (let i = 0; i < result.data.length; i++) {
             stateData.push({ value: result.data[i].total, name: result.data[i].name })
         }
@@ -34,7 +36,7 @@ function ChartsAdmin() {
     let days = []
     let dayValues = []
     const fetchByWeek = async () => {
-        const result = await axios.get('http://localhost:8080/api/v1/properties/num-of-properties')
+        const result = await axios.get('http://localhost:8080/api/v1/properties/num-of-properties', {headers: {Authorization: bearer}})
         for (let i = 0; i < result.data.length; i++) {
             days.push(result.data[i].day)
             dayValues.push(result.data[i].rented)

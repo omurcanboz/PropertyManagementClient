@@ -3,10 +3,12 @@ import axios from "axios";
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import { useNavigate } from 'react-router';
 import FileBase64 from 'react-file-base64';
+import { getBearer } from "../util/Utility";
 
 const AddProperty = () => {
 
 
+    const bearer = getBearer();
     const navigate = useNavigate();
     const data = useRef();
     const [stateSelector, setStateSelector] = useState([]);
@@ -56,12 +58,12 @@ const AddProperty = () => {
     }
 
     const getState = async () => {
-        let result = await axios.get('http://localhost:8080/api/v1/states');
+        let result = await axios.get('http://localhost:8080/api/v1/states', {headers: {Authorization: bearer}});
         setStateSelector(result.data);
     }
 
     const getPropertyType = async () => {
-        let result = await axios.get('http://localhost:8080/api/v1/property-types');
+        let result = await axios.get('http://localhost:8080/api/v1/property-types', {headers: {Authorization: bearer}});
         setPropertyTypeState(result.data);
     }
 
@@ -69,7 +71,7 @@ const AddProperty = () => {
         let val = event.target.value;
         console.log("VALUE: ", val)
         let res = val.split(',')[0];
-        let result = await axios.get('http://localhost:8080/api/v1/cities/state/' + res);
+        let result = await axios.get('http://localhost:8080/api/v1/cities/state/' + res, {headers: {Authorization: bearer}});
         setCitySelector(result.data);
         onStateFieldsChanged(event);
     }
@@ -85,7 +87,7 @@ const AddProperty = () => {
     }, [photoState])
 
     const persistProperty = async () => {
-        let result = await axios.post('http://localhost:8080/api/v1/properties', resultState);
+        let result = await axios.post('http://localhost:8080/api/v1/properties', resultState, {headers: {Authorization: bearer}});
         navigate('/properties');
     }
 

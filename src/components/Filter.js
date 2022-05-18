@@ -2,14 +2,15 @@ import React from "react";
 import axios from "axios";
 import { useState } from "react"
 import { useEffect } from "react";
+import { getBearer } from "../util/Utility";
 
 const Filter = (props) => {
-    
+    const bearer = getBearer();
     const [stateSelector, setStateSelector] = useState([]);
     const [citySelector, setCitySelector] = useState([]);
 
     const getState = async () => {
-        let result = await axios.get('http://localhost:8080/api/v1/states');
+        let result = await axios.get('http://localhost:8080/api/v1/states', {headers: {Authorization: bearer}});
         setStateSelector(result.data);
     }
 
@@ -21,7 +22,7 @@ const Filter = (props) => {
             console.log("event",event.target.value)
             setCitySelector([])
         } else {
-            let result = await axios.get('http://localhost:8080/api/v1/cities/state/' + val);
+            let result = await axios.get('http://localhost:8080/api/v1/cities/state/' + val, {headers: {Authorization: bearer}});
             setCitySelector(result.data);
             props.stateChanged(event);
         }

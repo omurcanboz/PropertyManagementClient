@@ -1,6 +1,7 @@
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js"
 import axios from "axios"
 import React, { useState } from 'react'
+import { getBearer } from "../util/Utility"
 
 
 
@@ -25,6 +26,7 @@ const CARD_OPTIONS = {
 }
 
 const PaymentForm = (props) => {
+    const bearer = getBearer();
     const [success, setSuccess] = useState(false)
     const stripe = useStripe()
     const elements = useElements()
@@ -52,7 +54,7 @@ const PaymentForm = (props) => {
                 token: token.token.id,
                 amount: amount.amount
 
-            }
+            }, {headers: {Authorization: bearer}}
             )
 
             console.log(response);
@@ -88,7 +90,7 @@ const PaymentForm = (props) => {
                 </form>
                 :
                 <div>
-                    <h2>You just bought a sweet spatula congrats this is the best decision of you're life</h2>
+                    <h2>Payment Success</h2>
                 </div>
             }
 

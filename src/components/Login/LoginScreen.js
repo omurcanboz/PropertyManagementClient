@@ -2,49 +2,52 @@ import React from 'react';
 import './Login.css';
 import axios from "axios";
 import { useEffect, useState } from "react";
+import jwtDecode from 'jwt-decode';
 
-export default function Login(props) {
-  const [userState, setUserState] = useState([
-    { userName: 'a', password: '1', role:"admin" },
-    { userName: 'b', password: '1' ,role:"landlord"},
-    { userName: 'c', password: '1' ,role:"tennant"}
-  ])
-  const [newUserState, setNewUserState] = useState({ userName: '', password: null })
-  const onFieldsChanged = (event) => {
-    let copy = { ...newUserState };
-    copy[event.target.name] = event.target.value;
-    setNewUserState(copy);
+export default function Login({setToken}) {
+
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+  
+  const onLogin  = async (credentials) => {
+
+    console.log(credentials);
+    let result =  await axios.post('http://localhost:8080/api/v1/auth/login', credentials);
+    console.log(result.data);
+    return result.data;
   }
-  const loginButtonClicked = () => {
-    //console.log(userState.map(u=>u.userName).filter(n=>n===newUserState.f))
-    if((userState.filter(user => user.userName === newUserState.userName).filter(user => user.password === newUserState.password).length )> 0) {
-      //console.log(props)
-      props.setAuthState('admin')
-    //props.setAuthState(userState.filter(user => user.userName === newUserState.userName).filter(user => user.password === newUserState.password)['role'])
-    } else {
-      console.log('login erorr')
-    }
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+    const token = await onLogin({
+      email,
+      password
+    });
+    localStorage.setItem('uid', token.userDto.id);
+    localStorage.setItem('urole', token.userDto.role);
+    localStorage.setItem('token', 'Bearer ' +token.accessToken);
+    setToken(token.accessToken);
   }
+
+  
+
+
   return (
     <div className="login-wrapper">
       <h1>Please Log In</h1>
-      UserName: <input
-        type="text"
-        //value="d"
-        onChange={onFieldsChanged}
-        name='userName'
-      />
-      Password: <input
-        type='text'
-        //value="4"
-        onChange={onFieldsChanged}
-        name='password'
-      />
-      <input
-        type='button'
-        value='Login'
-        onClick={loginButtonClicked}
-      />
+      <form onSubmit={handleSubmit}>
+        <label>
+          <p>Username</p>
+          <input type="text" onChange={e => setEmail(e.target.value)}/>
+        </label>
+        <label>
+          <p>Password</p>
+          <input type="password" onChange={e => setPassword(e.target.value)}/>
+        </label>
+        <div>
+          <button type="submit">Submit</button>
+        </div>
+      </form>
     </div>
   )
 }
