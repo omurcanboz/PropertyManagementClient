@@ -14,6 +14,8 @@ const Header = () => {
                 <ul>
                     <li><Link to="/properties"> Properties</Link></li>
                     <li><Link to="/add-property"> Add Property</Link></li>
+                    <li><Link to="/admin-charts"> Admin Charts</Link></li>
+                    <li><Link to="/landlord-charts"> Landlord Charts</Link></li>
                 </ul>
             </nav>
         </header>

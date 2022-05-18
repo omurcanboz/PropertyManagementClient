@@ -345,7 +345,7 @@ header ul li a {
   color: blue;
 }
 
-.Properties > div {
+.Properties > .Property-page {
   width: 100%;
   display: -webkit-box;
   display: -ms-flexbox;
