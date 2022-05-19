@@ -15,6 +15,11 @@ const PropertyDetail = () => {
 
     const [propertyDetail, setPropertyDetail] = useState({});
 
+    const deleteProperty = async () => {
+        await axios.post('http://localhost:8080/api/v1/properties/delete' ,{id: params.id}, { headers: {Authorization: bearer}})
+        navigate('/properties')
+    }
+
     const fetchProperty = async () => {
         let result = await axios.get('http://localhost:8080/api/v1/properties/' + params.id, {headers: {Authorization: bearer}})
         setPropertyDetail(result.data)
@@ -49,7 +54,7 @@ const PropertyDetail = () => {
                 </div>
                 {
                     role == "LANDLORD" ?
-                    <button className="delete">Delete</button>
+                    <button className="delete" onClick={deleteProperty}>Delete</button>
                     :
                     <Link to={`/rent/${params.id}`}> <button >Rent</button></Link>
                     

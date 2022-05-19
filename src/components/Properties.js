@@ -6,15 +6,18 @@ import axios from "axios";
 import { useEffect, useState } from "react"
 import Filter from "./Filter";
 import ReactDOM from 'react-dom';
-import { getBearer } from "../util/Utility";
+import { getBearer, getRole } from "../util/Utility";
 
 
 
 const Properties = (props) => {
 
     const bearer = getBearer();
+    const role=getRole();
+    const uid= localStorage.getItem('uid')
     const [propertyState, setPropertyState] = useState([]);
     //filter
+    const [lastTen, setLastTen]= useState(true);
     const [roomFilter, setRoomFilter] = useState(0);
     const [stateFilter, setStateFilter] = useState(0);
     const [cityFilter, setCityFilter] = useState(0);
@@ -63,6 +66,15 @@ const Properties = (props) => {
             setPropertyState(propertyNotFilterState.filter((p) => p['city']['id'] == cityFilter))
         }
     }
+    const onLastTenClicked = async () => {
+        setLastTen(!lastTen)
+        if(lastTen){
+            let result = await axios.get('http://localhost:8080/api/v1/properties/leases', {headers: {Authorization: bearer}})
+            setPropertyState(result)
+        }else{
+            setPropertyState(propertyNotFilterState)
+        }
+    }
     
     const onSearchResetClicked = () => {
         //let result = await axios.get('http://localhost:8080/api/v1/properties/room/0')//+roomFilter
@@ -82,7 +94,12 @@ const Properties = (props) => {
 
 
     const fetchProperties = async () => {
-        let result = await axios.get('http://localhost:8080/api/v1/properties', {headers: {Authorization: bearer}})
+        let result;
+        if(role==='LANDLORD'){
+            result = await axios.get('http://localhost:8080/api/v1/properties/owner/'+uid, {headers: {Authorization: bearer}})
+        }else{
+            result = await axios.get('http://localhost:8080/api/v1/properties', {headers: {Authorization: bearer}})
+        }
         setPropertyState(result.data);
     }
 
@@ -127,6 +144,7 @@ const Properties = (props) => {
 
 
     return <div className="Property-page">
+       
         <Filter id="filter"
             roomFilter={roomFilter}
             stateFilter={stateFilter}
@@ -135,12 +153,15 @@ const Properties = (props) => {
             stateChanged={onStateFilterChanged}
             cityChanged={onCityFilterChanged}
             onSearchClicked={onSearchClicked}
-            onSearchResetClicked={onSearchResetClicked}>
+            onSearchResetClicked={onSearchResetClicked}
+            onLastTenClicked={onLastTenClicked}>
 
         </Filter>
+        
         <div className="property-list">
             {propertyList}
         </div>
+        
     </div>;
 
 

@@ -40,6 +40,7 @@ const Header = (props) => {
         result = <header>
             <nav>
                 <ul>
+                <li><Link to="/properties"> Properties</Link></li>
                     <li><Link to="/landlord-charts"> Landlord Charts</Link></li>
                     <li><Link to="/add-property"> Add Property</Link></li>
                     <li><a onClick={logOutEvent}>Logout</a></li>
