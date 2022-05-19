@@ -9,6 +9,7 @@ const AddProperty = () => {
 
 
     const bearer = getBearer();
+    const uid =  localStorage.getItem('uid');
     const navigate = useNavigate();
     const data = useRef();
     const [stateSelector, setStateSelector] = useState([]);
@@ -27,10 +28,10 @@ const AddProperty = () => {
             lastRentedDate: '2022-02-14',
             photos: [],
             lastRentedBy: {
-                id: 2
+                id: 1
             },
             ownedBy: {
-                id: 2
+                id: ''
             },
             city: {
                 id: '',
@@ -87,6 +88,10 @@ const AddProperty = () => {
     }, [photoState])
 
     const persistProperty = async () => {
+        let copy = { ...resultState };
+        copy['ownedBy'].id = uid;
+        copy['lastRentedDate'] = new Date();
+        setResultState(copy);
         let result = await axios.post('http://localhost:8080/api/v1/properties', resultState, {headers: {Authorization: bearer}});
         navigate('/properties');
     }

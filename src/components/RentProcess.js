@@ -51,10 +51,10 @@ const RentProcess = (props) => {
 
     return (
         <div>
-
-<div style={{"width" : "100%"}} ><DatePicker selected={startDate} onChange={onHandleChange} dateFormat="MM/dd/yyyy" name="myDate" /></div>
-<div style={{"width" : "100%"}}><h1>Total Amount {totalAmount}</h1></div>
-<div style={{"width" : "100%"}}><StripeContainer amount={totalAmount}></StripeContainer></div>
+<div className="datepicker-wrapper">
+<div style={{"width" : "190px"}}><DatePicker selected={startDate} onChange={onHandleChange} dateFormat="MM/dd/yyyy" name="myDate" /></div>
+<div><h4>Total Amount {totalAmount}</h4></div></div>
+<div className="stripe-wrapper"><StripeContainer amount={totalAmount}></StripeContainer></div>
             
             
 
