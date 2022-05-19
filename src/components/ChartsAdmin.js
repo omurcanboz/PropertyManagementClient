@@ -111,8 +111,8 @@ function ChartsAdmin() {
     };
     return (
         <div>
-            <div>
-                State
+            <div className='admin-chart-header'>
+                <span className='title'>State</span>
                 <select onChange={onStateFieldsChanged}>
 
                     <option defaultValue>Select</option>

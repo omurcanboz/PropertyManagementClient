@@ -10,7 +10,9 @@ const CARD_OPTIONS = {
     style: {
         base: {
             iconColor: "#c4f0ff",
-            color: "#fff",
+            color: "#000",
+            border: "1px solid #000",
+            borderRadius: "8px",
             fontWeight: 500,
             fontFamily: "Roboto, Open Sans, Segoe UI, sans-serif",
             fontSize: "16px",
@@ -32,7 +34,6 @@ const PaymentForm = (props) => {
     const elements = useElements()
 
     console.log("PROPS: " , props);
-
 
     const handleSubmit = async (e) => {
         e.preventDefault()
